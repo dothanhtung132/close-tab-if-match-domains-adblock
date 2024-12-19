@@ -10,20 +10,32 @@
 
 (function() {
     'use strict';
+    (() => {
+        const isBlockedDomain = (hostname) => {
+            const blockedDomainNames = [
+                'shopee',
+                'lazada',
+            ];
 
-    // List of main domain names to block
-    const blockedDomainNames = [
-        'shopee',
-        'lazada'
-    ];
+            const mainDomainName = hostname.split('.').slice(-2, -1)[0];
 
-    // Extract the main domain name (before the first dot)
-    const hostname = window.location.hostname;
-    const mainDomainName = hostname.split('.').slice(-2, -1)[0];
+            return blockedDomainNames.includes(mainDomainName);
+        };
 
-    // Check if the main domain matches any in the blocked list
-    if (blockedDomainNames.includes(mainDomainName)) {
-        window.close();
-    }
+        const blockPage = () => {
+            if (isBlockedDomain(window.location.hostname)) {
+                window.close();
+            }
+        };
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            blockPage();
+        } else {
+            document.addEventListener(
+                'DOMContentLoaded',
+                blockPage,
+                false,
+            );
+        }
+    })();
 })();
-
