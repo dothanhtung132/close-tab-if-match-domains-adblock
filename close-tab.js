@@ -3,32 +3,18 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.4
 // @description  Automatically closes tabs if the main domain name matches specific names.
-// @author       Your Name
+// @author       Tung Do
 // @match        *://*/*
 // @grant        none
+// @run-at       document-start
 // ==/UserScript==
 
 (function() {
     'use strict';
-    (() => {
-        const isBlockedDomain = (hostname) => {
-            return /^(.*\.)?(shopee|lazada)\./.test(hostname);
-        };
-
-        const blockPage = () => {
-            if (isBlockedDomain(window.location.hostname)) {
-                window.close();
-            }
-        };
-
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            blockPage();
-        } else {
-            document.addEventListener(
-                'DOMContentLoaded',
-                blockPage,
-                false,
-            );
-        }
-    })();
+    const isBlockedDomain = (hostname) => {
+        return /^(.*\.)?(shopee|lazada|about:blank)\./.test(hostname);
+    };
+    if (isBlockedDomain(window.location.hostname)) {
+        window.close();
+    }
 })();
